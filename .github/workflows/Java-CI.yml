@@ -28,7 +28,7 @@ jobs:
         token: ${{ secrets.CODECOV }}
     - name: Build and tag image
       run: |
-        docker build  -t "Github-Actions-Docker:latest" -t "Github-Actions-Docker:${GITHUB_SHA::8}" .
+        docker build  -t "github-actions-docker:latest" -t "Github-Actions-Docker:${GITHUB_SHA::8}" .
     - name: Docker Push Image
       uses: docker/build-push-action@v1
       with:
@@ -41,4 +41,4 @@ jobs:
       uses: Kolkies/githubpackages-docker@v1.0.4
       with:
         repo-token: ${{secrets.GITHUB_TOKEN}}
-        image-name: "Github-Actions-Docker"
+        image-name: "github-actions-docker"
