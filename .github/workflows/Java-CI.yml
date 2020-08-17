@@ -30,9 +30,8 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_NAME }}
         password: ${{ secrets.DOCKER_PWD }}
-        repository: xiaokas/studyhub
-        tag_with_ref: true
-        tag_with_sha: true
+        repository: xiaokas/github-action-demo
+        tags: latest
     - name: Github Package Docker
       uses: Kolkies/githubpackages-docker@v1.0.4
       with:
