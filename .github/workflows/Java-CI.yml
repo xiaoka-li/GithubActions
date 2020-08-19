@@ -18,10 +18,6 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Coverage Test
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV }}
     - name: Build and tag image
       run: |
         docker build  -t "github-actions-docker:latest" .
@@ -37,3 +33,8 @@ jobs:
       with:
         repo-token: ${{secrets.GITHUB_TOKEN}}
         image-name: "github-actions-docker"
+    - name: Coverage Test
+        run: mvn cobertura:cobertura
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV }}

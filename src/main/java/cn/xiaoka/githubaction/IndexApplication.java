@@ -1,4 +1,4 @@
-package cn.xiaoka.test;
+package cn.xiaoka.githubaction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
