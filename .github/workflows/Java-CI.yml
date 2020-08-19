@@ -34,7 +34,7 @@ jobs:
         repo-token: ${{secrets.GITHUB_TOKEN}}
         image-name: "github-actions-docker"
     - name: Coverage Test
-        run: mvn cobertura:cobertura
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV }}
+      run: mvn cobertura:cobertura
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV }}
