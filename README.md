@@ -17,18 +17,58 @@
 <hr>
 
 ### 构建流程
-1. master分支触发
-2. maven进行打包进行单元测试
-3. 关联到codecov进行代码审查
-4. 打包成docker镜像
-5. push到DockerHub仓库
-6. push到Github仓库
+
+* Builder 阶段
+    1. master分支触发
+    2. 执行代码检测maven插件命令
+    3. 生成代码检测结果
+    4. 上传到Codecov
+* Deploy 阶段
+    1. master分支触发
+    2. maven进行打包进行单元测试
+    3. 打包成docker镜像
+    4. push到DockerHub仓库
+    5. push到Github仓库
+* Release 阶段
+    1. master分支触发
+    2. 根据tag生成release文件
+    3. 提交到仓库release库
+
+<hr>
+
 ### 示例代码
+
+#### Build 阶段
+```yaml
+name: Build Codecov
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build Cobertura
+        run: mvn cobertura:cobertura
+      - name: Coverage Test
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV }}
+```
+#### Deploy 阶段
+
 ```yaml
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI
+name: Deploy Docker
 on:
   push:
     branches: [ master ]
@@ -45,10 +85,6 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Coverage Test
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV }}
     - name: Build and tag image
       run: |
         docker build  -t "github-actions-docker:latest" .
@@ -64,4 +100,20 @@ jobs:
       with:
         repo-token: ${{secrets.GITHUB_TOKEN}}
         image-name: "github-actions-docker"
+```
+#### Release 阶段
+
+```yaml
+name: Build Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
